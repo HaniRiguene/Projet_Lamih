@@ -1,0 +1,1 @@
+Internship at LAMIH : Building a federated learning platform

@@ -1,0 +1,15 @@
+services:
+  hub_main:
+    build: ./Hub_Client
+    container_name: hub_main
+    restart: on-failure
+    volumes:
+      # Volume partagé pour les Datasets/Models
+      - type: bind
+        source: /home/WebFL/FL_hub
+        target: /app/FL_hub
+    environment:
+      MQTT_HOST:  172.18.0.1
+      MAC_ADDRESS: ce:bf:f8:ae:76:fb
+      API_HOST: 172.18.0.1
+      API_PORT: 8000
