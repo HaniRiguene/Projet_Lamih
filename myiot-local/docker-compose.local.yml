@@ -1,0 +1,102 @@
+version: '3.8'
+
+services:
+  mosquitto:
+    image: eclipse-mosquitto:latest
+    container_name: myiot_mosquitto
+    ports:
+      - "1884:1883"
+      - "9001:9001"
+    volumes:
+      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - myiot_mosquitto_data:/mosquitto/data
+    networks:
+      - myiot_network
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: myiot_postgres
+    environment:
+      POSTGRES_DB: myiot_db
+      POSTGRES_USER: myiot_user
+      POSTGRES_PASSWORD: myiot_pass
+    ports:
+      - "5434:5432"
+    volumes:
+      - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql
+      - myiot_postgres_data:/var/lib/postgresql/data
+    networks:
+      - myiot_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U myiot_user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  ingestor:
+    build:
+      context: .
+      dockerfile: Dockerfile.ingestor
+    container_name: myiot_ingestor
+    depends_on:
+      - postgres
+      - mosquitto
+    environment:
+      MQTT_HOST: mosquitto
+      MQTT_PORT: 1883
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: myiot_db
+      DB_USER: myiot_user
+      DB_PASSWORD: myiot_pass
+    networks:
+      - myiot_network
+    restart: unless-stopped
+
+  automation:
+    build:
+      context: .
+      dockerfile: Dockerfile.automation
+    container_name: myiot_automation
+    depends_on:
+      - postgres
+      - mosquitto
+    environment:
+      MQTT_HOST: mosquitto
+      MQTT_PORT: 1883
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: myiot_db
+      DB_USER: myiot_user
+      DB_PASSWORD: myiot_pass
+    networks:
+      - myiot_network
+    restart: unless-stopped
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    container_name: myiot_api
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: myiot_db
+      DB_USER: myiot_user
+      DB_PASSWORD: myiot_pass
+    networks:
+      - myiot_network
+    restart: unless-stopped
+
+networks:
+  myiot_network:
+    driver: bridge
+
+volumes:
+  myiot_postgres_data:
+  myiot_mosquitto_data:
