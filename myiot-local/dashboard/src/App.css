@@ -1,0 +1,150 @@
+/* Global App Layout */
+.app-container {
+  display: flex;
+  min-height: 100vh;
+  /* Allow growth if content is tall */
+  background-color: #f3f4f6;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Main Content Area (Center) */
+.main-content {
+  margin-left: 280px;
+  /* Width of left sidebar */
+  padding: 10px 20px 10px 55px;
+  /* Increased left padding */
+  flex: 1;
+  min-width: 0;
+  min-height: 100vh;
+  /* Allow growth */
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 5px;
+}
+
+.active-room-title {
+  color: #222;
+  margin: 0 0 2px 0;
+  font-size: 24px;
+}
+
+.active-room-subtitle {
+  color: #666;
+  margin: 0;
+  font-size: 13px;
+}
+
+.rooms-grid {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+  align-items: center;
+}
+
+.bottom-content-grid {
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;
+  flex: 1;
+  min-height: 0;
+}
+
+.left-column {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  /* Already compacted */
+  flex: 1;
+}
+
+.right-column {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  /* Reduced from 10px */
+  width: 280px;
+  flex-shrink: 0;
+}
+
+/* Right Sidebar Panel (Far Right) */
+.right-sidebar-panel {
+  width: 300px;
+  padding: 15px;
+  /* Reduced from 20px */
+  flex-shrink: 0;
+  background-color: #f3f4f6;
+  height: 100vh;
+  overflow-y: auto;
+  box-sizing: border-box;
+  /* Fixes height calculation including padding */
+}
+
+/* RESPONSIVE BREAKPOINTS */
+
+/* Tablet & Mobile (< 1200px) - Stack everything vertically */
+@media (max-width: 1200px) {
+  .app-container {
+    height: auto;
+    /* Allow full page scrolling */
+    overflow: auto;
+    flex-direction: column;
+  }
+
+  .main-content {
+    margin-left: 0;
+    /* Remove sidebar offset */
+    height: auto;
+    width: 100%;
+    overflow: visible;
+  }
+
+  .bottom-content-grid {
+    flex-direction: column;
+  }
+
+  .left-column {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .right-column {
+    width: 100%;
+    /* Quick settings full width */
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .right-sidebar-panel {
+    width: 100%;
+    height: auto;
+    border-left: none;
+    border-top: 1px solid #f0f0f0;
+    overflow: visible;
+  }
+}
+
+/* Mobile (< 768px) */
+@media (max-width: 768px) {
+  .rooms-grid {
+    justify-content: center;
+  }
+
+  .dashboard-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .right-column {
+    flex-direction: column;
+    /* Stack quick settings on small mobile */
+  }
+}

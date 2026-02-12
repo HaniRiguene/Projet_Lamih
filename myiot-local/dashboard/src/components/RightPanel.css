@@ -1,0 +1,176 @@
+/* Right Panel Specific Styles */
+.right-panel-widget {
+    margin-bottom: 20px;
+    /* Reduced from 30px */
+    font-family: 'Poppins', sans-serif;
+}
+
+.history-widget {
+    margin-top: -5px;
+    /* Compacted */
+}
+
+.widget-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    /* Reduced from 20px */
+}
+
+.widget-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #222;
+    margin: 0;
+}
+
+.view-all {
+    color: #4865ff;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.view-all:hover {
+    text-decoration: underline;
+}
+
+/* Members Card Container */
+.members-card {
+    background-color: white;
+    border-radius: 20px;
+    padding: 15px;
+    /* Reduced from 20px */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    margin-top: -5px;
+    /* Compacted */
+}
+
+/* Members List */
+.member-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    /* Reduced from 15px */
+}
+
+.member-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    /* Reduced from 15px */
+}
+
+.member-avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background-color: #c4c4c4;
+    /* Placeholder gray */
+    flex-shrink: 0;
+}
+
+.member-info h4 {
+    margin: 0;
+    font-size: 15px;
+    color: #222;
+    font-weight: 600;
+}
+
+.member-info p {
+    margin: 2px 0 0 0;
+    font-size: 12px;
+    color: #666;
+    font-weight: 500;
+}
+
+.add-member-btn {
+    width: 100%;
+    background-color: #536bf6;
+    /* Matching the blue in image */
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 25px;
+    /* More rounded as per image */
+    font-size: 16px;
+    font-weight: 500;
+    margin-top: 25px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.add-member-btn:hover {
+    background-color: #435be0;
+}
+
+/* History List */
+.history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+}
+
+.history-item {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.history-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    /* Softly rounded square */
+    background-color: transparent;
+    /* Image 2 shows icons might not have bg, or it's very subtle. 
+     Actually, App.jsx device cards have bg. 
+     History items in image -> Icons look like they are just colored icons or have text nearby.
+     Wait, looking closer at Image 2: "History" items have blue icons.
+     Let's keep them simple. */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #4865ff;
+}
+
+.history-content {
+    flex: 1;
+}
+
+.history-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2px;
+}
+
+.history-device {
+    font-weight: 700;
+    font-size: 15px;
+    color: #222;
+}
+
+.history-time {
+    font-size: 13px;
+    color: #555;
+    font-weight: 500;
+}
+
+.history-detail {
+    font-size: 13px;
+    color: #444;
+}
+
+.status-on {
+    color: #4865ff;
+    font-weight: 700;
+}
+
+.status-off {
+    color: #ff4757;
+    font-weight: 700;
+}

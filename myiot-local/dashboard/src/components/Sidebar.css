@@ -1,0 +1,137 @@
+:root {
+    --sidebar-bg: #4361ee;
+    --sidebar-width: 280px;
+    --body-bg: #f3f4f6;
+    /* Light gray for main content */
+    --text-color: #ffffff;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: var(--sidebar-width);
+    background: var(--sidebar-bg);
+    display: flex;
+    flex-direction: column;
+    padding: 10px 0 0 10px;
+    /* Padding left only to push items */
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    z-index: 1000;
+}
+
+.logo-container {
+    padding: 20px 30px;
+    margin-bottom: 20px;
+    color: white;
+}
+
+.logo-text {
+    font-family: 'Pacifico', cursive;
+    /* Or similar script font */
+    font-size: 2rem;
+    margin: 0;
+}
+
+.nav-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.nav-item {
+    position: relative;
+    width: 100%;
+    list-style: none;
+    border-top-left-radius: 30px;
+    border-bottom-left-radius: 30px;
+    margin-bottom: 20px;
+    /* Spacing between items */
+}
+
+.nav-link {
+    position: relative;
+    display: flex;
+    /* Flex to align icon and text */
+    align-items: center;
+    /* Vertical center */
+    padding: 15px 20px;
+    text-decoration: none;
+    color: var(--text-color);
+    font-size: 1rem;
+    font-weight: 500;
+    border-top-left-radius: 30px;
+    border-bottom-left-radius: 30px;
+    transition: 0.3s;
+}
+
+.nav-link .icon {
+    margin-right: 15px;
+    min-width: 24px;
+    height: 24px;
+    /* Ensure height matches icon size */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Hover Effect for non-active items */
+.nav-item:not(.active):hover .nav-link {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* ACTIVE STATE - The Magic */
+.nav-item.active {
+    background: var(--body-bg);
+    /* Match the body background */
+}
+
+.nav-item.active .nav-link {
+    background: var(--body-bg);
+    /* Match body background */
+    color: var(--sidebar-bg);
+    /* Text turns blue */
+}
+
+/* The Curves Above and Below */
+.nav-item.active::before {
+    content: "";
+    position: absolute;
+    top: -20px;
+    right: 0;
+    width: 20px;
+    height: 20px;
+    background: transparent;
+    border-radius: 50%;
+    box-shadow: 10px 10px 0 0 var(--body-bg);
+    pointer-events: none;
+}
+
+.nav-item.active::after {
+    content: "";
+    position: absolute;
+    bottom: -20px;
+    right: 0;
+    width: 20px;
+    height: 20px;
+    background: transparent;
+    border-radius: 50%;
+    box-shadow: 10px -10px 0 0 var(--body-bg);
+    pointer-events: none;
+}
+
+.title {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+@media (max-width: 1200px) {
+    .sidebar {
+        display: none;
+    }
+}

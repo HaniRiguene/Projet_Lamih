@@ -1,0 +1,113 @@
+.sensor-card {
+    position: relative;
+    /* For absolute positioning of the status badge */
+    background-color: white;
+    border-radius: 20px;
+    padding: 20px;
+    width: 240px;
+    /* Match room card width approx */
+    min-width: 200px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    font-family: 'Poppins', sans-serif;
+    margin-bottom: 20px;
+    /* Spacing between cards if stacked */
+}
+
+.sensor-info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sensor-icon-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    /* Smooth rounded square like image */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.sensor-label {
+    font-size: 14px;
+    color: #213547;
+    font-weight: 500;
+}
+
+.sensor-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: #213547;
+}
+
+.sensor-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    /* Space between up and down arrows */
+    color: #4865ff;
+}
+
+.control-btn {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s;
+}
+
+.control-btn:hover {
+    transform: scale(1.2);
+}
+
+/* Status Badge (Top Right) */
+.sensor-status-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #27ae60;
+    background-color: rgba(39, 174, 96, 0.1);
+    padding: 4px 8px;
+    border-radius: 12px;
+}
+
+.status-dot {
+    width: 6px;
+    height: 6px;
+    background-color: #27ae60;
+    border-radius: 50%;
+    animation: blink 2s infinite ease-in-out;
+}
+
+@keyframes blink {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.4;
+        transform: scale(0.9);
+    }
+}
+
+.sensor-status-badge.inactive {
+    color: #ff3f34;
+    background-color: rgba(255, 63, 52, 0.1);
+}
+
+.status-dot.inactive {
+    background-color: #ff3f34;
+}

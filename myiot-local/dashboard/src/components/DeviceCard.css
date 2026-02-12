@@ -1,0 +1,104 @@
+.device-card {
+    background-color: white;
+    border-radius: 20px;
+    padding: 20px;
+    width: 280px;
+    /* Base width */
+    flex: 1;
+    /* Allow growing to fill row */
+    min-width: 280px;
+    /* Don't get too small */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    font-family: 'Poppins', sans-serif;
+    height: 145px;
+    /* Compromise height */
+    box-sizing: border-box;
+    transition: transform 0.2s;
+}
+
+.device-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.device-icon-box {
+    width: 50px;
+    height: 50px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    flex-shrink: 0;
+}
+
+.device-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.device-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: #222;
+    margin-bottom: 2px;
+}
+
+.device-status {
+    font-size: 13px;
+    color: #888;
+}
+
+/* TOGGLE SWITCH - The tricky part to make it look custom */
+.device-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.status-label {
+    font-weight: 600;
+    font-size: 14px;
+    color: #333;
+}
+
+.toggle-switch {
+    width: 50px;
+    height: 28px;
+    background-color: #e5e7eb;
+    /* Off state gray */
+    border-radius: 30px;
+    position: relative;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.toggle-switch.on {
+    background-color: #e0e7ff;
+    /* Light blue background when ON */
+}
+
+.toggle-knob {
+    width: 24px;
+    height: 24px;
+    background-color: white;
+    border-radius: 50%;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    transition: transform 0.3s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.toggle-switch.on .toggle-knob {
+    transform: translateX(22px);
+    background-color: #4865ff;
+    /* Blue knob when ON */
+}
