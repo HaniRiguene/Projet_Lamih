@@ -1,21 +1,34 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import './Sidebar.css';
-import { LayoutDashboard, Home, Wifi, Lock, Users, Settings, LogOut } from 'lucide-react';
+import { LayoutDashboard, Wifi, Users, LogOut, History } from 'lucide-react';
 
 export default function Sidebar() {
-    const [activeItem, setActiveItem] = useState('Dashboard');
     const navigate = useNavigate();
+    const location = useLocation();
+
+    // Determine active menu item based on current path
+    const getActiveItem = () => {
+        const path = location.pathname;
+        if (path === '/') return 'Dashboard';
+        if (path === '/devices') return 'Devices';
+        if (path === '/members') return 'Members';
+        if (path === '/history') return 'History';
+        return 'Dashboard';
+    };
+
+    const activeItem = getActiveItem();
 
     const menuItems = [
-        { name: 'Dashboard', icon: <LayoutDashboard size={25} /> },
-        { name: 'My Home', icon: <Home size={25} /> },
-        { name: 'Devices', icon: <Wifi size={25} /> },
-        { name: 'Privacy', icon: <Lock size={25} /> },
-        { name: 'Members', icon: <Users size={25} /> },
-        { name: 'Settings', icon: <Settings size={25} /> }
-
+        { name: 'Dashboard', path: '/', icon: <LayoutDashboard size={25} /> },
+        { name: 'Devices', path: '/devices', icon: <Wifi size={25} /> },
+        { name: 'Members', path: '/members', icon: <Users size={25} /> },
+        { name: 'History', path: '/history', icon: <History size={25} /> },
     ];
+
+    const handleNavigation = (item) => {
+        navigate(item.path);
+    };
 
     const handleLogout = (e) => {
         e.preventDefault();
@@ -34,9 +47,9 @@ export default function Sidebar() {
                     <li
                         key={item.name}
                         className={`nav-item ${activeItem === item.name ? 'active' : ''}`}
-                        onClick={() => setActiveItem(item.name)}
+                        onClick={() => handleNavigation(item)}
                     >
-                        <a href="#" className="nav-link">
+                        <a href="#" className="nav-link" onClick={(e) => e.preventDefault()}>
                             <span className="icon">{item.icon}</span>
                             <span className="title">{item.name}</span>
                         </a>

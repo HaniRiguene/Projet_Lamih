@@ -14,17 +14,15 @@ const LightIntensityChart = ({ deviceId }) => {
             }
 
             // Fetch history for both sensors
-            // Note: We fetch more points to ensure we have enough overlap if timestamps don't perfectly align
+            // Get slightly more data to ensure we have enough points for the chart
             const [tempHistory, lumHistory] = await Promise.all([
                 fetchSensorHistory(deviceId, 'temperature', 10),
                 fetchSensorHistory(deviceId, 'luminosity', 10)
             ]);
 
-            // Simple merging strategy: 
-            // We want to align the "Latest" readings.
-            // The API returns arrays sorted DESC (Newest -> Oldest).
-            // So we'll iterate 0 (Newest) to N (Oldest) and pair them up.
-            // Then we reverse the result so the chart draws Left (Old) -> Right (New).
+            // Merge data arrays
+            // The API returns data newest-first, so time flows backwards in the array.
+            // We iterate through both arrays and pair them up by index for the chart.
 
             const maxLen = Math.max((tempHistory || []).length, (lumHistory || []).length);
             const formattedData = [];

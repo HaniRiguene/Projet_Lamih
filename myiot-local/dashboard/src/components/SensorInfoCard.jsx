@@ -2,6 +2,7 @@ import React from 'react';
 import './SensorInfoCard.css';
 import { ChevronUp, ChevronDown } from 'lucide-react';
 
+// Component to display sensor values (Temperature, Luminosity) with online status
 export default function SensorInfoCard({ icon: Icon, color, label, value, unit }) {
     return (
         <div className="sensor-card">

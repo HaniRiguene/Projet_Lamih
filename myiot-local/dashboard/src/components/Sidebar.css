@@ -85,20 +85,17 @@
     background: rgba(255, 255, 255, 0.1);
 }
 
-/* ACTIVE STATE - The Magic */
+/* Active State Styling */
 .nav-item.active {
     background: var(--body-bg);
-    /* Match the body background */
 }
 
 .nav-item.active .nav-link {
     background: var(--body-bg);
-    /* Match body background */
     color: var(--sidebar-bg);
-    /* Text turns blue */
 }
 
-/* The Curves Above and Below */
+/* Rounded Edges for Active Item */
 .nav-item.active::before {
     content: "";
     position: absolute;

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import './RightPanel.css';
 import { User, X, Check, Eye, EyeOff, Shield, UserX } from 'lucide-react';
 import { fetchUsers, registerUser } from '../services/api';
 
+// Widget to display and manage members (users)
 const MembersWidget = () => {
     const [members, setMembers] = useState([]);
     const [showModal, setShowModal] = useState(false);
@@ -14,6 +16,7 @@ const MembersWidget = () => {
         role: 'Guest', // Default
         password: ''
     });
+    const [currentUser, setCurrentUser] = useState(null);
 
     const loadMembers = async () => {
         const users = await fetchUsers();
@@ -24,6 +27,15 @@ const MembersWidget = () => {
 
     useEffect(() => {
         loadMembers();
+        const userStr = localStorage.getItem('user');
+        if (userStr) {
+            try {
+                const user = JSON.parse(userStr);
+                setCurrentUser(user);
+            } catch (e) {
+                console.error("Error parsing user from local storage", e);
+            }
+        }
     }, []);
 
     const handleInputChange = (e) => {
@@ -43,10 +55,11 @@ const MembersWidget = () => {
         setIsLoading(true);
         try {
             await registerUser(newUser);
-            // Success
+
+            // Clear form and refresh list
             setShowModal(false);
             setNewUser({ full_name: '', email: '', role: 'Guest', password: '' });
-            await loadMembers(); // Refresh list
+            await loadMembers();
         } catch (error) {
             console.error("Failed to add member", error);
             alert("Failed to add member: " + error.message);
@@ -59,7 +72,7 @@ const MembersWidget = () => {
         <div className="right-panel-widget">
             <div className="widget-header">
                 <h3 className="widget-title">Members</h3>
-                <a href="#" className="view-all">View all</a>
+                <Link to="/members" className="view-all">View all</Link>
             </div>
             <div className="members-card">
                 <div className="member-list">
@@ -76,10 +89,18 @@ const MembersWidget = () => {
                     ))}
                     {members.length === 0 && <p style={{ textAlign: 'center', color: '#888', fontStyle: 'italic' }}>No members found.</p>}
                 </div>
-                <button className="add-member-btn" onClick={() => setShowModal(true)}>Add member</button>
+                <button
+                    className="add-member-btn"
+                    onClick={() => setShowModal(true)}
+                    disabled={currentUser?.role === 'Guest'}
+                    style={currentUser?.role === 'Guest' ? { backgroundColor: '#9ca3af', cursor: 'not-allowed', opacity: 0.7 } : {}}
+                    title={currentUser?.role === 'Guest' ? "Guests cannot add members" : "Add new member"}
+                >
+                    Add member
+                </button>
             </div>
 
-            {/* NEW UI: Modal Overlay */}
+            {/* Modal Overlay for Adding Members */}
             {showModal && (
                 <div style={{
                     position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',

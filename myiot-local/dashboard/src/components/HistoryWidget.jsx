@@ -1,18 +1,16 @@
 import React from 'react';
-import { Smartphone, Router, Lightbulb, Cctv, Tv, Speaker } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import './RightPanel.css';
 
+// Widget to display the latest activity logs in the sidebar
 const HistoryWidget = ({ historyItems }) => {
-    // Mapping string status to style
+
+    // Helper to style status badges (ON/OFF)
     const renderStatus = (status) => {
         if (status === 'ON') return <span className="status-on">ON</span>;
         if (status === 'OFF') return <span className="status-off">OFF</span>;
         return status;
     };
-
-    // Fallback if no props provided (though it should be)
-    // const historyItems = props.historyItems || [];
 
     return (
         <div className="right-panel-widget history-widget">

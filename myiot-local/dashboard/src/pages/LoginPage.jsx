@@ -13,11 +13,13 @@ const LoginPage = () => {
     const [error, setError] = useState('');
     const [isShaking, setIsShaking] = useState(false);
 
+    // Handle form submission
     const handleLogin = async (e) => {
         e.preventDefault();
         setError('');
 
         try {
+            // Send login request to the backend
             const response = await fetch('http://localhost:8000/login', {
                 method: 'POST',
                 headers: {
@@ -29,7 +31,7 @@ const LoginPage = () => {
             if (response.ok) {
                 const data = await response.json();
                 console.log('Login successful:', data);
-                // Store user info and role
+                // Store user info and navigate to dashboard
                 localStorage.setItem('user', JSON.stringify(data));
                 navigate('/');
             } else {
@@ -41,6 +43,7 @@ const LoginPage = () => {
         }
     };
 
+    // Helper to show error message and trigger shake animation
     const triggerError = (msg) => {
         setError(msg);
         setIsShaking(true);
@@ -57,7 +60,7 @@ const LoginPage = () => {
                     <h1>Welcome to your Smart Home.</h1>
                     <p>Control everything from one place.</p>
 
-                    {/* 3D Image */}
+                    {/* Illustration */}
                     <div className="illustration-placeholder">
                         {console.log("Image Path:", smartHomeImg)}
                         <img

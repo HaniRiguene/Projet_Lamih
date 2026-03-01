@@ -7,16 +7,13 @@
   font-family: 'Poppins', sans-serif;
 }
 
-/* Main Content Area (Center) */
+/* Main Content - Center */
 .main-content {
   margin-left: 280px;
-  /* Width of left sidebar */
   padding: 10px 20px 10px 55px;
-  /* Increased left padding */
   flex: 1;
   min-width: 0;
   min-height: 100vh;
-  /* Allow growth */
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -61,7 +58,6 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  /* Already compacted */
   flex: 1;
 }
 
@@ -74,33 +70,29 @@
   flex-shrink: 0;
 }
 
-/* Right Sidebar Panel (Far Right) */
+/* Right Sidebar Panel */
 .right-sidebar-panel {
   width: 300px;
   padding: 15px;
-  /* Reduced from 20px */
   flex-shrink: 0;
   background-color: #f3f4f6;
   height: 100vh;
   overflow-y: auto;
   box-sizing: border-box;
-  /* Fixes height calculation including padding */
 }
 
-/* RESPONSIVE BREAKPOINTS */
+/* RESPONSIVE DESIGN */
 
-/* Tablet & Mobile (< 1200px) - Stack everything vertically */
+/* Tablet & Mobile (< 1200px) */
 @media (max-width: 1200px) {
   .app-container {
     height: auto;
-    /* Allow full page scrolling */
     overflow: auto;
     flex-direction: column;
   }
 
   .main-content {
     margin-left: 0;
-    /* Remove sidebar offset */
     height: auto;
     width: 100%;
     overflow: visible;
@@ -117,7 +109,6 @@
 
   .right-column {
     width: 100%;
-    /* Quick settings full width */
     flex-direction: row;
     flex-wrap: wrap;
   }
@@ -145,6 +136,5 @@
 
   .right-column {
     flex-direction: column;
-    /* Stack quick settings on small mobile */
   }
 }

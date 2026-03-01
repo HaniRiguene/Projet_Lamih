@@ -5,11 +5,11 @@ const ProtectedRoute = ({ children }) => {
     const user = localStorage.getItem('user');
 
     if (!user) {
-        // If no user is found in local storage, redirect to login page
+        // Redirect to login if user is not authenticated
         return <Navigate to="/login" replace />;
     }
 
-    // If user exists, render the child component (Dashboard, History, etc.)
+    // Render child component if authenticated
     return children;
 };
 

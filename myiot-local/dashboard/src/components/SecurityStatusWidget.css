@@ -71,7 +71,6 @@
 
 .status-dot.inactive {
     background-color: #ff3f34;
-    /* Keeps same blinking animation or remove? Let's keep it consistent */
 }
 
 @keyframes blink {

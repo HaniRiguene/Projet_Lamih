@@ -1,3 +1,6 @@
+import React from 'react';
+
+// Simple header component for consistent layout across pages
 export default function Header() {
     return (
         <header style={{

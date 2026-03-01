@@ -1,6 +1,7 @@
 import React from 'react';
 import './RoomCard.css';
 
+// Component to display room status and sensor count
 export default function RoomCard({ name, count, icon: Icon, active, onClick }) {
     return (
         <div className={`room-card ${active ? 'active' : ''}`} onClick={onClick}>

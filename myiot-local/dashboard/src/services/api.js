@@ -1,9 +1,5 @@
-// -----------------------------------------------------------------------------
-// CONFIGURATION (CHANGE THIS WHEN DEPLOYING TO LAB SERVER)
-// -----------------------------------------------------------------------------
-// LOCAL DOCKER: 'http://localhost:8000'
-// LAB SERVER:   'http://192.168.1.1:8001' 
-const API_BASE_URL = 'http://localhost:8000';
+// AUTOMATIC CONFIGURATION (Works on Local AND Server)
+const API_BASE_URL = '/api';
 // -----------------------------------------------------------------------------
 
 /**
@@ -139,3 +135,61 @@ export const registerUser = async (userData) => {
     }
 };
 
+export const deleteUser = async (userId) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/users/${userId}`, {
+            method: 'DELETE',
+        });
+        if (!response.ok) {
+            // Handle 404 cleanly if user already gone
+            if (response.status === 404) return true;
+            throw new Error('Failed to delete user');
+        }
+        return true;
+    } catch (error) {
+        console.error("Error deleting user:", error);
+        return false;
+    }
+};
+
+// History
+export const fetchHistory = async (limit = 100) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/history?limit=${limit}`);
+        if (!response.ok) throw new Error('Failed to fetch history');
+        return await response.json();
+    } catch (error) {
+        console.error("Error fetching history:", error);
+        return [];
+    }
+};
+
+export const logHistory = async (device, user_name, status) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/history`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ device, user_name, status }),
+        });
+        if (!response.ok) throw new Error('Failed to log history');
+        return await response.json();
+    } catch (error) {
+        console.error("Error logging history:", error);
+        return null;
+    }
+};
+
+export const toggleDevice = async (deviceId) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/devices/${deviceId}/toggle`, {
+            method: 'POST',
+        });
+        if (!response.ok) throw new Error('Failed to toggle device');
+        return await response.json();
+    } catch (error) {
+        console.error("Error toggling device:", error);
+        throw error;
+    }
+};

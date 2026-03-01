@@ -8,21 +8,13 @@ import MembersWidget from '../components/MembersWidget'
 import HistoryWidget from '../components/HistoryWidget'
 import SecurityStatusWidget from '../components/SecurityStatusWidget'
 import LightIntensityChart from '../components/LightIntensityChart'
-import { fetchSensorCounts, fetchLatestSensorValue } from '../services/api'
-import { Sofa, Bed, Utensils, Bath, Thermometer, Sun, User } from 'lucide-react'
+import { fetchSensorCounts, fetchLatestSensorValue, fetchHistory, logHistory } from '../services/api'
+import { Cctv, User, Thermometer, Sun } from 'lucide-react'
+import { ROOM_MAPPING, ROOM_UI_CONFIG, SENSOR_CONFIG } from '../constants'
 
-const Dashboard = ({ devices, toggleDevice, historyItems }) => {
-    // Mapping Database Device IDs to Dashboard Rooms
-    const ROOM_MAPPING = {
-        'salon': 'Living Room',
-        'entree': 'Kitchen',
-        'cuisine': 'Kitchen',
-        'bureau': 'Bedroom',
-        'chambre': 'Bedroom',
-        'bedroom': 'Bedroom',
-        'chambre1': 'Bathroom',
-        'bathroom': 'Bathroom',
-    };
+const Dashboard = ({ devices, toggleDevice }) => {
+    // Initialize default states for room and sensors
+    // We use the mappings from constants.js to ensure names match the database
 
     const [activeRoom, setActiveRoom] = useState('Living Room');
     const [temperature, setTemperature] = useState('--');
@@ -43,7 +35,8 @@ const Dashboard = ({ devices, toggleDevice, historyItems }) => {
         }
     }, []);
 
-    // Helper to find a device ID for the current room
+    // Helper function to find the main device ID associated with a room name
+    // This is needed because the database uses IDs like 'salon' but we display 'Living Room'
     const getDeviceForRoom = (roomName) => {
         const reverseMapping = Object.keys(ROOM_MAPPING).filter(key => ROOM_MAPPING[key] === roomName);
         if (reverseMapping.includes('salon')) return 'salon';
@@ -53,7 +46,7 @@ const Dashboard = ({ devices, toggleDevice, historyItems }) => {
         return reverseMapping.length > 0 ? reverseMapping[0] : null;
     };
 
-    // Effect to update Temperature when Active Room changes
+    // Update environmental data for active room
     useEffect(() => {
         const updateRoomData = async () => {
             const deviceId = getDeviceForRoom(activeRoom);
@@ -68,7 +61,7 @@ const Dashboard = ({ devices, toggleDevice, historyItems }) => {
                 setLuminosity('--');
             }
 
-            // Independent Door/Sabotage/Battery Check
+            // Monitor security sensors
             const roomDeviceIds = Object.keys(ROOM_MAPPING).filter(key => ROOM_MAPPING[key] === activeRoom);
 
             let foundDoor = null;
@@ -98,13 +91,8 @@ const Dashboard = ({ devices, toggleDevice, historyItems }) => {
         return () => clearInterval(interval);
     }, [activeRoom]);
 
-    // Static Rooms Structure with Dynamic Counts State
-    const [rooms, setRooms] = useState([
-        { name: 'Living Room', count: 0, icon: Sofa },
-        { name: 'Bedroom', count: 0, icon: Bed },
-        { name: 'Kitchen', count: 0, icon: Utensils },
-        { name: 'Bathroom', count: 0, icon: Bath },
-    ]);
+    // Room status configuration
+    const [rooms, setRooms] = useState(ROOM_UI_CONFIG.map(r => ({ ...r, count: 0 })));
 
     useEffect(() => {
         const loadCounts = async () => {
@@ -131,14 +119,69 @@ const Dashboard = ({ devices, toggleDevice, historyItems }) => {
         return () => clearInterval(interval);
     }, []);
 
+    // History data management
+    const [recentHistory, setRecentHistory] = useState([]);
+
+    const loadHistory = async () => {
+        const data = await fetchHistory(5);
+        // Map icons and names
+        const mappedHistory = data.map(item => {
+            // Match sensor context
+            const deviceConfig = devices.find(d => d.uniqueId === item.device);
+
+            // Format display name
+            let displayName = item.device;
+            if (deviceConfig) {
+                // Use configured name
+                displayName = deviceConfig.name;
+            } else if (item.device.includes('_')) {
+                // Format ID as name
+                const parts = item.device.split('_');
+                const type = parts[parts.length - 1];
+                displayName = type.charAt(0).toUpperCase() + type.slice(1);
+            }
+
+            return {
+                ...item,
+                time: new Date(item.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                user: item.user_name,
+                device: displayName, // Display name
+                icon: deviceConfig ? deviceConfig.icon : Cctv
+            };
+        });
+        setRecentHistory(mappedHistory);
+    };
+
+    useEffect(() => {
+        if (devices.length > 0) {
+            loadHistory();
+        }
+    }, [devices]);
+
+    const handleDeviceToggle = async (uniqueId) => {
+        const device = devices.find(d => d.uniqueId === uniqueId);
+        if (!device) return;
+
+        // Update UI state
+        toggleDevice(uniqueId);
+
+        // Log action to database
+        const newStatus = device.isOn ? 'OFF' : 'ON';
+        const userName = user.full_name || 'Guest';
+        await logHistory(device.uniqueId, userName, newStatus);
+
+        // Refresh history
+        await loadHistory();
+    };
+
     return (
         <div className="app-container">
             <Sidebar />
             <div className="main-content">
                 <header className="dashboard-header">
                     <div>
-                        <h1 style={{ color: '#222', margin: '0 0 5px 0', fontSize: '26px' }}>My Home</h1>
-                        <p style={{ color: '#666', margin: 0, fontSize: '14px' }}>Hi {user?.full_name?.split(' ')[0] || 'Guest'}, Good Morning!</p>
+                        <h1 style={{ color: '#222', margin: '0 0 5px 0', fontSize: '26px' }}>Dashboard</h1>
+                        <p style={{ color: '#666', margin: 0, fontSize: '14px' }}>Welcome back, {user?.full_name?.split(' ')[0] || 'Guest'} 👋</p>
                     </div>
                 </header>
 
@@ -177,14 +220,15 @@ const Dashboard = ({ devices, toggleDevice, historyItems }) => {
                             <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap' }}>
                                 {devices.map(device => (
                                     <DeviceCard
-                                        key={device.id}
+                                        key={device.uniqueId}
                                         name={device.name}
                                         status={device.status}
                                         isOn={device.isOn}
                                         icon={device.icon}
                                         iconColor={device.color}
                                         activeText={device.activeText}
-                                        onToggle={() => toggleDevice(device.id)}
+                                        onToggle={() => handleDeviceToggle(device.uniqueId)}
+                                        disabled={user?.role === 'Guest'}
                                     />
                                 ))}
                             </div>
@@ -241,7 +285,7 @@ const Dashboard = ({ devices, toggleDevice, historyItems }) => {
                     <span style={{ fontWeight: '600', fontSize: '16px', color: '#222' }}>{user.full_name || 'Guest'}</span>
                 </div>
                 <MembersWidget />
-                <HistoryWidget historyItems={historyItems.slice(0, 5)} />
+                <HistoryWidget historyItems={recentHistory} />
             </div>
         </div >
     )

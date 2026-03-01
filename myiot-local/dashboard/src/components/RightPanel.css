@@ -125,12 +125,7 @@
     height: 40px;
     border-radius: 10px;
     /* Softly rounded square */
-    background-color: transparent;
-    /* Image 2 shows icons might not have bg, or it's very subtle. 
-     Actually, App.jsx device cards have bg. 
-     History items in image -> Icons look like they are just colored icons or have text nearby.
-     Wait, looking closer at Image 2: "History" items have blue icons.
-     Let's keep them simple. */
+    /* Icon styling */
     display: flex;
     align-items: center;
     justify-content: center;

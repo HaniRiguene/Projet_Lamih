@@ -1,31 +1,76 @@
-import React, { useState } from 'react';
-import { ChevronRight, ChevronDown, Search } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { ChevronRight, ChevronDown, Search, Cctv, Tv, Router, Smartphone, Speaker, Lightbulb } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
-import '../App.css'; // Reuse global layout
-import '../components/RightPanel.css'; // Reuse history styles where applicable
+import { fetchHistory, fetchDevices } from '../services/api';
+import { SENSOR_CONFIG } from '../constants';
+import '../App.css';
+import '../components/RightPanel.css';
 
-const HistoryPage = ({ historyItems }) => {
-    // Pagination Logic
+const HistoryPage = () => {
+    const [historyItems, setHistoryItems] = useState([]);
+    const [devices, setDevices] = useState([]);
+
+    useEffect(() => {
+        const loadData = async () => {
+            // Fetch history and devices
+            const [historyData, devicesData] = await Promise.all([
+                fetchHistory(500),
+                fetchDevices()
+            ]);
+
+            setDevices(devicesData);
+
+            // Process history items to display correct names and icons
+            const mappedData = historyData.map(item => {
+                let displayName = item.device;
+                let icon = Cctv;
+
+                // Determine display name based on sensor type or ID
+                if (item.device.includes('_')) {
+                    const parts = item.device.split('_');
+                    const type = parts[parts.length - 1].toLowerCase();
+
+                    // Check config for match
+                    if (SENSOR_CONFIG[type]) {
+                        displayName = SENSOR_CONFIG[type].name;
+                        icon = SENSOR_CONFIG[type].icon;
+                    } else {
+                        displayName = type.charAt(0).toUpperCase() + type.slice(1);
+                    }
+                } else {
+                    displayName = item.device.charAt(0).toUpperCase() + item.device.slice(1);
+                }
+
+                return {
+                    ...item,
+                    icon: icon,
+                    device: displayName,
+                    time: new Date(item.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                    user: item.user_name
+                };
+            });
+            setHistoryItems(mappedData);
+        };
+        loadData();
+    }, []);
+
     // Filter State
-    const [dateRange, setDateRange] = useState('Last 24 Hours');
+    const [dateRange, setDateRange] = useState('All Time');
     const [selectedDevice, setSelectedDevice] = useState('All');
     const [selectedEvent, setSelectedEvent] = useState('All');
 
-    // Reset pagination when filter changes
-    React.useEffect(() => {
+    // Reset page to 1 when filters change
+    useEffect(() => {
         setCurrentPage(1);
     }, [dateRange, selectedDevice, selectedEvent]);
 
-    // Filter Logic
+    // Apply filters to history items
     const filteredHistory = historyItems.filter(item => {
-        // Device filter must apply to ALL items
         if (selectedDevice !== 'All' && item.device !== selectedDevice) return false;
-
-        // Event filter must apply to ALL items
         if (selectedEvent !== 'All' && item.status !== selectedEvent) return false;
 
-        if (!item.timestamp) return true; // Keep legacy items
+        if (!item.timestamp) return true;
         const diffTime = new Date() - new Date(item.timestamp);
         const diffHours = diffTime / (1000 * 60 * 60);
 
@@ -123,6 +168,7 @@ const HistoryPage = ({ historyItems }) => {
                                         onChange={(e) => setDateRange(e.target.value)}
                                         style={{ width: '100%', padding: '10px 15px', borderRadius: '10px', border: '1px solid #e0e0e0', appearance: 'none', color: '#444', outline: 'none', cursor: 'pointer' }}
                                     >
+                                        <option value="All Time">All Time</option>
                                         <option value="Last 24 Hours">Last 24 Hours</option>
                                         <option value="Last 7 Days">Last 7 Days</option>
                                     </select>

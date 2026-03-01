@@ -16,14 +16,12 @@ const SecurityStatusWidget = ({ doorStatus, sabotageStatus, batteryStatus }) => 
     let doorText = '--';
     let DoorIcon = DoorOpen;
     let animationClass = '';
-    // let textAnimationClass = ''; // Removed per request
 
     if (isDoorOpen) {
         doorColor = '#ff3f34'; // Red
         doorText = 'OPEN!';
         DoorIcon = DoorOpen;
         animationClass = 'alarm-active';
-        // textAnimationClass = 'text-alarm-active'; // Removed per request
     } else if (isDoorClosed) {
         doorColor = '#27ae60'; // Green
         doorText = 'CLOSED';
@@ -35,14 +33,12 @@ const SecurityStatusWidget = ({ doorStatus, sabotageStatus, batteryStatus }) => 
     let sabText = '--';
     let SabIcon = Shield; // Default to Shield (neutral)
     let sabAnimationClass = '';
-    // let sabTextAnimationClass = ''; // Removed per request
 
     if (isSabotageAlert) {
         sabColor = '#ff3f34'; // Red
         sabText = 'ALERT!';
         SabIcon = Bell;
         sabAnimationClass = 'alarm-active';
-        // sabTextAnimationClass = 'text-alarm-active'; // Removed per request
     } else if (isSabotageSafe) {
         sabColor = '#27ae60'; // Green
         sabText = 'SAFE';
@@ -58,12 +54,12 @@ const SecurityStatusWidget = ({ doorStatus, sabotageStatus, batteryStatus }) => 
     if (batteryStatus !== null) {
         batteryText = `Battery: ${batteryStatus}%`;
         batteryColor = '#44bd32'; // Green (Active)
-        batteryTextColor = '#222'; // Default black text
+        batteryTextColor = '#222';
 
         if (parseInt(batteryStatus) < 40) {
             batteryColor = '#ff3f34'; // Red (Low)
             BatteryIcon = BatteryLow;
-            batteryTextColor = '#ff3f34'; // Red text for warning
+            batteryTextColor = '#ff3f34';
         }
     }
 

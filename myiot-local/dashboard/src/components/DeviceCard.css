@@ -49,12 +49,13 @@
     margin-bottom: 2px;
 }
 
+/* Device Status Text */
 .device-status {
     font-size: 13px;
     color: #888;
 }
 
-/* TOGGLE SWITCH - The tricky part to make it look custom */
+/* Toggle Switch Styles */
 .device-footer {
     display: flex;
     justify-content: space-between;
