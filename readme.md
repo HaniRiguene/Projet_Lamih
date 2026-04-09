@@ -55,7 +55,7 @@ IoT Devices → MQTT (1883) → Sensor_Ingestor → PostgreSQL
               ↓
            Server_API → REST Endpoints
               ↓
-           Vue Frontend → Web UI
+           React Frontend → Web UI
 ```
 
 ---
@@ -126,14 +126,14 @@ bash test-deployment.sh
 | **Backend APIs** | FastAPI + Uvicorn | 0.100+ |
 | **MQTT Broker** | Eclipse Mosquitto | 2.0+ |
 | **Database** | PostgreSQL | 14-alpine |
-| **Frontend** | Vue.js | 3.0+ |
+| **Frontend** | React.js | 19.0+ |
 | **Conteneurisation** | Docker | 20.10+ |
 | **Orchestration** | docker compose | 2.0+ |
 
 ### Languages
 
 - 🐍 **Python** 3.10+ (Services backend)
-- 🟩 **Vue.js** (Frontend interactif)
+- 🟩 **React.js** (Frontend interactif)
 - 📝 **SQL** (PostgreSQL time-series)
 - 🔵 **MQTT 3.1.1** (Communication temps réel)
 
